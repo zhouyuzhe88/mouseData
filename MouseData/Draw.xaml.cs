@@ -19,23 +19,12 @@ namespace MouseData
     /// </summary>
     partial class Draw : Window
     {
-        static List<Brush> ColerList { get; set; }
-
         Dictionary<Button, Canvas[]> ButCav { get; set; }
+
         Experiment Exp { get; set; }
         int CavHeight { get; set; }
         int CavWidth { get; set; }
         Button BtAll { get; set; }
-
-        static Draw()
-        {
-            ColerList = new List<Brush>();
-            ColerList.Add(Brushes.Red);
-            ColerList.Add(Brushes.Orange);
-            ColerList.Add(Brushes.Gold);
-            ColerList.Add(Brushes.Green);
-            ColerList.Add(Brushes.Blue);
-        }
 
         internal Draw(Experiment exp)
         {
@@ -72,7 +61,7 @@ namespace MouseData
                 {
                     int colorId = Exp.GetColorId(i, seg.WaveList[i].Count / seg.Length * Parameters.SegmentLength);
                     Point p = seg.Points.Last().Position;
-                    AddPoint(cavs[i], Parameters.ColorRadio[colorId], (int)(p.X * Parameters.XRate), (int)(p.Y * Parameters.YRate), ColerList[colorId]);
+                    AddPoint(cavs[i], Parameters.ColorRadio[colorId], (int)(p.X * Parameters.XRate), (int)(p.Y * Parameters.YRate), Parameters.ColorList[colorId]);
                 }
             }
         }
@@ -115,7 +104,7 @@ namespace MouseData
             {
                 Ellipse e = new Ellipse();
                 e.Width = e.Height = 7;
-                e.Fill = ColerList[i];
+                e.Fill = Parameters.ColorList[i];
                 colors.Children.Add(e);
                 TextBlock t = new TextBlock();
                 t.Text = " " + ((int)fLs[i] - 1) + " - " + (int)fLs[i + 1] + "HZ     ";

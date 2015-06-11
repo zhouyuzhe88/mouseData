@@ -17,6 +17,7 @@ namespace MouseData
         public static readonly double YRate;
         public static readonly List<double> ColorRate;
         public static readonly List<double> ColorRadio;
+        public static readonly List<Brush> ColorList;
 
         static Parameters()
         {
@@ -29,6 +30,7 @@ namespace MouseData
             YRate = GetDouble("YRate", 1);
             ColorRate = GetDoubleList("ColorRate", new List<double>() { 0.8, 0.6, 0.4, 0.2, 0 });
             ColorRadio = GetDoubleList("ColorRadio", new List<double>() { 3, 2, 2, 1, 1 });
+            ColorList = GetColorList("ColorList");
         }
 
         private static List<Brush> GetColorList(string tag)
