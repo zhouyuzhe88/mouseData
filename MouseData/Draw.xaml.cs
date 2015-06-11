@@ -19,7 +19,8 @@ namespace MouseData
     /// </summary>
     partial class Draw : Window
     {
-        Dictionary<Button, Canvas[]> ButCav { get; set; }
+        Dictionary<Button, List<Canvas>> ButCav { get; set; }
+        Canvas[][][] Canvases { get; set; }
 
         Experiment Exp { get; set; }
         int CavHeight { get; set; }
@@ -30,27 +31,53 @@ namespace MouseData
         {
             InitializeComponent();
             this.Exp = exp;
-            this.ButCav = new Dictionary<Button, Canvas[]>();
+            this.ButCav = new Dictionary<Button, List<Canvas>>();
             DrawBackground();
             BtAll = BuildBaseButton("ALL");
             BtAll.Click += BtAll_Click;
-            foreach (Trail t in Exp.Trils)
+            InitCanvases();
+            for (int i = 0; i < exp.Trils.Count; ++i)
             {
-                DrawTrail(t);
+                DrawTrail(i);
             }
         }
 
-        private void DrawTrail(Trail t)
+        private void InitCanvases()
         {
-            Button bt = BuildBaseButton("Trail" + t.Id);
-            bt.Click += bt_Click;
-            Canvas[] cavs = new Canvas[Exp.ChannelCnt];
-            this.ButCav[bt] = cavs;
-            for (int i = 0; i < Exp.ChannelCnt; ++i)
+            Canvases = new Canvas[Exp.Trils.Count][][];
+            for (int i = 0; i < Exp.Trils.Count; ++i)
             {
-                cavs[i] = BuildBaseCanvas(i / 4, i % 4);
-                this.MainGrid.Children.Add(cavs[i]);
+                Trail t = Exp.Trils[i];
+                Button bt = BuildBaseButton("Trail" + t.Id);
+                bt.Click += bt_Click;
+                List<Canvas> cavs = new List<Canvas>();
+                this.ButCav[bt] = cavs;
+                Canvases[i] = new Canvas[Exp.ChannelCnt][];
+                for (int j = 0; j < Exp.ChannelCnt; ++j)
+                {
+                    Canvases[i][j] = new Canvas[Parameters.ColorRate.Count];
+                    for (int k = 0; k < Parameters.ColorRate.Count; ++k)
+                    {
+                        Canvases[i][j][k] = BuildBaseCanvas(j / 4, j % 4);
+                        cavs.Add(Canvases[i][j][k]);
+                    }
+                }
             }
+            for (int k = Parameters.ColorRate.Count - 1; k >=0; --k)
+            {
+                for (int j = 0; j < Exp.ChannelCnt; ++j)
+                {
+                    for (int i = 0; i < Exp.Trils.Count; ++i)
+                    {
+                        this.MainGrid.Children.Add(Canvases[i][j][k]);
+                    }
+                }
+            }
+        }
+
+        private void DrawTrail(int ti)
+        {
+            Trail t = Exp.Trils[ti];
             foreach (Segment seg in t.Segments)
             {
                 if (seg.Points.Count == 0 || seg.Length < Parameters.SegmentLength * Parameters.SegmentRate)
@@ -61,7 +88,7 @@ namespace MouseData
                 {
                     int colorId = Exp.GetColorId(i, seg.WaveList[i].Count / seg.Length * Parameters.SegmentLength);
                     Point p = seg.Points.Last().Position;
-                    AddPoint(cavs[i], Parameters.ColorRadio[colorId], (int)(p.X * Parameters.XRate), (int)(p.Y * Parameters.YRate), Parameters.ColorList[colorId]);
+                    AddPoint(Canvases[ti][i][colorId], Parameters.ColorRadio[colorId], (int)(p.X * Parameters.XRate), (int)(p.Y * Parameters.YRate), Parameters.ColorList[colorId]);
                 }
             }
         }
