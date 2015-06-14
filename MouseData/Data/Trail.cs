@@ -20,7 +20,7 @@ namespace MouseData
 
         static Trail()
         {
-            string pattern = @"^t\s+(?<start>\d+)\s+Trail\s+(?<id>\d+)[\s\S]+?(?<end>\d+)[\s\S]+(?<dt>\d+)[\s\S]+p[\s\S]+\s+(?<h>\d+):(?<m>\d+):(?<s>\d+)\.(?<ms>\d+)\]$";
+            string pattern = @"t\s+(?<start>\d+)\s+Trail\s+(?<id>\d+)[\s\S]+?(?<end>\d+)[\s\S]+(?<dt>\d+)[\s\S]+p[\s\S]+\s+(?<h>\d+):(?<m>\d+):(?<s>\d+)\.(?<ms>\d+)\]";
             Line = new Regex(pattern);
         }
 
