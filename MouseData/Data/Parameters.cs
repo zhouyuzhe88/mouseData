@@ -36,8 +36,17 @@ namespace MouseData
         private static List<Brush> GetColorList(string tag)
         {
             List<int> def = new List<int>() { 128, 255, 0, 0, 128, 255, 165, 0, 128, 255, 255, 0, 128, 0, 128, 0, 128, 0, 0, 255 };
-            List<int> argb = GetIntList(tag, def);
+            List<int> argb = GetIntList(tag, new List<int>());
             List<Brush> res = new List<Brush>();
+            if (argb.Count == 0)
+            {
+                res.Add(Brushes.Red);
+                res.Add(Brushes.Orange);
+                res.Add(Brushes.Yellow);
+                res.Add(Brushes.Green);
+                res.Add(Brushes.Blue);
+                return res;
+            }
             if (argb.Count % 4 != 0)
             {
                 argb = def;
