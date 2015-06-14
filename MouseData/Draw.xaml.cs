@@ -88,7 +88,7 @@ namespace MouseData
                 {
                     int colorId = Exp.GetColorId(i, seg.WaveList[i].Count / seg.Length * Parameters.SegmentLength);
                     Point p = seg.Points.Last().Position;
-                    AddPoint(Canvases[ti][i][colorId], Parameters.ColorRadio[colorId], (int)(p.X * Parameters.XRate), (int)(p.Y * Parameters.YRate), Parameters.ColorList[colorId]);
+                    AddPoint(Canvases[ti][i][colorId], Parameters.ColorRadio[colorId], (int)(p.X * Parameters.XRate), this.CavHeight - (int)(p.Y * Parameters.YRate), Parameters.ColorList[colorId]);
                 }
             }
         }
