@@ -18,7 +18,7 @@ namespace MouseData
 
         static TimePoint()
         {
-            string pattern = @"^(?<h>\d+):(?<m>\d+):(?<s>\d+)\.(?<ms>\d+)\s+(?<x>\d+)\s+(?<y>\d+)$";
+            string pattern = @"(?<h>\d+):(?<m>\d+):(?<s>\d+)\.(?<ms>\d+)\s+(?<x>\d+)\s+(?<y>\d+)";
             Line = new Regex(pattern);
         }
 
