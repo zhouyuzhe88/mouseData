@@ -88,7 +88,8 @@ namespace MouseData
                 {
                     int colorId = Exp.GetColorId(i, seg.WaveList[i].Count / seg.Length * Parameters.SegmentLength);
                     Point p = seg.Points.Last().Position;
-                    AddPoint(Canvases[ti][i][colorId], Parameters.ColorRadio[colorId], (int)(p.X * Parameters.XRate), this.CavHeight - (int)(p.Y * Parameters.YRate), Parameters.ColorList[colorId]);
+                    AddPoint(Canvases[ti][i][colorId], Parameters.ColorRadio[colorId], (int)(p.X * Parameters.XRate),
+                        (this.CavHeight + Exp.MaxY * Parameters.YRate) / 2 - (int)(p.Y * Parameters.YRate), Parameters.ColorList[colorId]);
                 }
             }
         }
@@ -96,8 +97,8 @@ namespace MouseData
         private void DrawBackground()
         {
             this.Title = "Experiment " + Exp.Id;
-            this.CavWidth = (int)(((int)Exp.MaxX / 50 + ((int)Exp.MaxX % 50 == 0 ? 0 : 1)) * 50 * Parameters.XRate + 75);
-            this.CavHeight = (int)(((int)Exp.MaxY / 50 + ((int)Exp.MaxY % 50 == 0 ? 0 : 1)) * 50 * Parameters.YRate + 75);
+            this.CavWidth = (int)(((int)Exp.MaxX / 50 + ((int)Exp.MaxX % 50 == 0 ? 0 : 1)) * 50 * Parameters.XRate + 50);
+            this.CavHeight = (int)(((int)Exp.MaxY / 50 + ((int)Exp.MaxY % 50 == 0 ? 0 : 1)) * 50 * Parameters.YRate + 50);
             for (int i = 0; i < Exp.ChannelCnt; ++i)
             {
                 Canvas cv = BuildBaseCanvas(i / 4, i % 4);
