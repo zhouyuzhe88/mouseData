@@ -13,7 +13,7 @@ namespace MouseData
         string[] MoveData { get; set; }
         string[] BehaveData { get; set; }
         string[] WaveData { get; set; }
-        
+
         public List<Experiment> Experiments { get; set; }
         List<List<DateTime>> ChannelTime { get; set; }
         List<string> ChannelTag { get; set; }
@@ -33,7 +33,7 @@ namespace MouseData
         {
             int pi = 0;
             int[] ti = new int[ChannelCnt];
-            foreach(Experiment exp in Experiments)
+            foreach (Experiment exp in Experiments)
             {
                 exp.ChannelCnt = this.ChannelCnt;
                 exp.MaxWaveCnt = new int[this.ChannelCnt];
@@ -156,6 +156,7 @@ namespace MouseData
                 else if (Trail.IsATrail(data))
                 {
                     Trail t = new Trail(data);
+                    t.Exp = now;
                     now.Trils.Add(t);
                 }
             }

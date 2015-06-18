@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,19 +21,30 @@ namespace MouseData
     partial class Draw : Window
     {
         Dictionary<Button, List<Canvas>> ButCav { get; set; }
+        Dictionary<Button, int> ButId { get; set; }
+        bool[] TrailUse { get; set; }
         Canvas[][][] Canvases { get; set; }
 
         Experiment Exp { get; set; }
         int CavHeight { get; set; }
         int CavWidth { get; set; }
         Button BtAll { get; set; }
+        Button BtAnalysis { get; set; }
 
         internal Draw(Experiment exp)
         {
             InitializeComponent();
             this.Exp = exp;
             this.ButCav = new Dictionary<Button, List<Canvas>>();
+            this.ButId = new Dictionary<Button, int>();
+            this.TrailUse = new bool[Exp.Trils.Count];
+            for (int i = 0; i < Exp.Trils.Count; ++i)
+            {
+                this.TrailUse[i] = true;
+            }
             DrawBackground();
+            BtAnalysis = BuildBaseButton("Analysis");
+            BtAnalysis.Click += BtAnalysis_Click;
             BtAll = BuildBaseButton("ALL");
             BtAll.Click += BtAll_Click;
             InitCanvases();
@@ -40,6 +52,23 @@ namespace MouseData
             {
                 DrawTrail(i);
             }
+        }
+
+        void BtAnalysis_Click(object sender, RoutedEventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Trail\tL/R\tArea\tFood\tChannel\tSPK");
+            sb.AppendLine();
+            for (int i = 0; i < Exp.Trils.Count; ++i)
+            {
+                if (this.TrailUse[i])
+                {
+                    sb.Append(Exp.Trils[i].Analsys());
+                }
+            }
+            string res = sb.ToString();
+            string fileName = string.Format("{0}-{1}-{2}-{3}-analsys.txt", Exp.Tag, Exp.Id, DateTime.Now.Hour, DateTime.Now.Minute);
+            File.WriteAllText(fileName, res, Encoding.Default);
         }
 
         private void InitCanvases()
@@ -52,6 +81,7 @@ namespace MouseData
                 bt.Click += bt_Click;
                 List<Canvas> cavs = new List<Canvas>();
                 this.ButCav[bt] = cavs;
+                this.ButId[bt] = i;
                 Canvases[i] = new Canvas[Exp.ChannelCnt][];
                 for (int j = 0; j < Exp.ChannelCnt; ++j)
                 {
@@ -214,6 +244,10 @@ namespace MouseData
             if (btAll.Background == Brushes.Gold)
             {
                 btAll.Background = Brushes.Gray;
+                for (int i = 0; i < Exp.Trils.Count; ++i)
+                {
+                    this.TrailUse[i] = false;
+                }
                 foreach (Button bt in ButCav.Keys)
                 {
                     bt.Background = Brushes.Gray;
@@ -226,6 +260,10 @@ namespace MouseData
             else
             {
                 btAll.Background = Brushes.Gold;
+                for (int i = 0; i < Exp.Trils.Count; ++i)
+                {
+                    this.TrailUse[i] = true;
+                }
                 foreach (Button bt in ButCav.Keys)
                 {
                     bt.Background = Brushes.Gold;
@@ -243,6 +281,7 @@ namespace MouseData
             if (bt.Background == Brushes.Gold)
             {
                 bt.Background = Brushes.Gray;
+                this.TrailUse[this.ButId[bt]] = false;
                 foreach (Canvas cv in ButCav[bt])
                 {
                     cv.Visibility = System.Windows.Visibility.Hidden;
@@ -251,6 +290,7 @@ namespace MouseData
             else
             {
                 bt.Background = Brushes.Gold;
+                this.TrailUse[this.ButId[bt]] = true;
                 foreach (Canvas cv in ButCav[bt])
                 {
                     cv.Visibility = System.Windows.Visibility.Visible;

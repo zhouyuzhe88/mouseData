@@ -28,7 +28,7 @@ namespace MouseData
         {
             InitializeComponent();
             DirectoryInfo dir = new DirectoryInfo(System.Environment.CurrentDirectory);
-            foreach(FileInfo file in dir.GetFiles())
+            foreach (FileInfo file in dir.GetFiles())
             {
                 if (file.Name.EndsWith("Position.txt"))
                 {
@@ -38,7 +38,7 @@ namespace MouseData
                 {
                     this.WaveFileTb.Text = file.Name;
                 }
-                else if (file.Name.EndsWith(".txt"))
+                else if (file.Name.EndsWith(".txt") && !file.Name.EndsWith("analsys.txt"))
                 {
                     this.BehaveFileTb.Text = file.Name;
                 }
@@ -83,6 +83,7 @@ namespace MouseData
             ButExp = new Dictionary<Button, Experiment>();
             foreach (Experiment exp in this.Analyser.Experiments)
             {
+                exp.Tag = this.BehaveFileTb.Text.Replace(".txt", "");
                 Button bt = new Button();
                 bt.Height = 30;
                 bt.Focusable = false;

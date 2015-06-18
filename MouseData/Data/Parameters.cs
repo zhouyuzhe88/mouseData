@@ -13,6 +13,7 @@ namespace MouseData
         public static readonly double SegmentRate;
         public static readonly int SegmentLength;
         public static readonly int FeedTime;
+        public static readonly int Xseparate;
         public static readonly double XRate;
         public static readonly double YRate;
         public static readonly List<double> ColorRate;
@@ -26,6 +27,7 @@ namespace MouseData
             SegmentRate = GetDouble("SegmentRate", 0.4);
             SegmentLength = GetInt("SegmentLength", 100);
             FeedTime = GetInt("FeedTime", 400);
+            Xseparate = GetInt("Xseparate", 210);
             XRate = GetDouble("XRate", 1);
             YRate = GetDouble("YRate", 1);
             ColorRate = GetDoubleList("ColorRate", new List<double>() { 0.8, 0.6, 0.4, 0.2, 0 });

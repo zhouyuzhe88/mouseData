@@ -12,6 +12,7 @@ namespace MouseData
         public double MaxX { get; set; }
         public double MaxY { get; set; }
         public int Id { get; set; }
+        public string Tag { get; set; }
         public int ChannelCnt { get; set; }
         public int[] MaxWaveCnt { get; set; }
         public List<string> ChannelTag { get; set; }
