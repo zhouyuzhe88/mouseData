@@ -63,7 +63,7 @@ namespace MouseData
                     }
                 }
             }
-            for (int k = Parameters.ColorRate.Count - 1; k >=0; --k)
+            for (int k = Parameters.ColorRate.Count - 1; k >= 0; --k)
             {
                 for (int j = 0; j < Exp.ChannelCnt; ++j)
                 {
@@ -131,11 +131,12 @@ namespace MouseData
             for (int i = 0; i < Parameters.ColorRate.Count; ++i)
             {
                 Ellipse e = new Ellipse();
-                e.Width = e.Height = 7;
+                e.Width = e.Height = 7 * Math.Min(1.2, Parameters.XRate * 1.4);
                 e.Fill = Parameters.ColorList[i];
                 colors.Children.Add(e);
                 TextBlock t = new TextBlock();
                 t.Text = " " + ((int)fLs[i] - 1) + " - " + (int)fLs[i + 1] + "HZ     ";
+                t.FontSize *= Math.Min(1.2, Parameters.XRate * 1.4);
                 colors.Children.Add(t);
             }
             res.Children.Add(colors);
@@ -176,7 +177,8 @@ namespace MouseData
         private static void AddPoint(Canvas cv, double radio, double x, double y, Brush bruch)
         {
             Rectangle rectangle = new Rectangle();
-            rectangle.Height = rectangle.Width = radio * 2;
+            rectangle.Height = radio * 2 * Parameters.YRate;
+            rectangle.Width = radio * 2 * Parameters.XRate;
             rectangle.Margin = new Thickness(x - radio, cv.Height - y - radio, 0, 0);
             rectangle.Fill = bruch;
             cv.Children.Add(rectangle);
