@@ -27,6 +27,11 @@ namespace MouseData
         public MainWindow()
         {
             InitializeComponent();
+            FillFileName();
+        }
+
+        private void FillFileName()
+        {
             DirectoryInfo dir = new DirectoryInfo(System.Environment.CurrentDirectory);
             foreach (FileInfo file in dir.GetFiles())
             {
@@ -43,7 +48,6 @@ namespace MouseData
                     this.BehaveFileTb.Text = file.Name;
                 }
             }
-
         }
 
         private void ChooseFile(TextBox tb)

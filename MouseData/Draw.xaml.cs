@@ -56,19 +56,8 @@ namespace MouseData
 
         void BtAnalysis_Click(object sender, RoutedEventArgs e)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Trail\tL/R\tArea\tFood\tChannel\tSPK");
-            sb.AppendLine();
-            for (int i = 0; i < Exp.Trils.Count; ++i)
-            {
-                if (this.TrailUse[i])
-                {
-                    sb.Append(Exp.Trils[i].Analsys());
-                }
-            }
-            string res = sb.ToString();
-            string fileName = string.Format("{0}-{1}-{2}-{3}-analsys.txt", Exp.Tag, Exp.Id, DateTime.Now.Hour, DateTime.Now.Minute);
-            File.WriteAllText(fileName, res, Encoding.Default);
+            Exp.AnalysisSPK(this.TrailUse);
+            System.Windows.Forms.MessageBox.Show("Analysis SPK Done");
         }
 
         private void InitCanvases()

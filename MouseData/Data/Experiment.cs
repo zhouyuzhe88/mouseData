@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,6 +39,23 @@ namespace MouseData
                 }
             }
             return i;
+        }
+
+        public void AnalysisSPK(bool[] trailUse)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Trail\tL/R\tArea\tFood\tChannel\tSPK");
+            sb.AppendLine();
+            for (int i = 0; i < this.Trils.Count; ++i)
+            {
+                if (trailUse[i])
+                {
+                    sb.Append(this.Trils[i].Analsys());
+                }
+            }
+            string res = sb.ToString();
+            string fileName = string.Format("{0}-{1}-{2}-{3}-analysis.txt", this.Tag, this.Id, DateTime.Now.Hour, DateTime.Now.Minute);
+            File.WriteAllText(fileName, res, Encoding.Default);
         }
     }
 }
