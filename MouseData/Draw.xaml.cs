@@ -206,12 +206,13 @@ namespace MouseData
 
         private static void AddPoint(Canvas cv, double radio, double x, double y, Brush bruch)
         {
-            Rectangle rectangle = new Rectangle();
-            rectangle.Height = radio * 2 * Parameters.YRate;
-            rectangle.Width = radio * 2 * Parameters.XRate;
-            rectangle.Margin = new Thickness(x - radio, cv.Height - y - radio, 0, 0);
-            rectangle.Fill = bruch;
-            cv.Children.Add(rectangle);
+            Type t = Parameters.ShapeType;
+            Shape shape = (Shape)Activator.CreateInstance(t);
+            shape.Height = radio * 2 * Parameters.YRate;
+            shape.Width = radio * 2 * Parameters.XRate;
+            shape.Margin = new Thickness(x - radio, cv.Height - y - radio, 0, 0);
+            shape.Fill = bruch;
+            cv.Children.Add(shape);
         }
 
         Button BuildBaseButton(string content)

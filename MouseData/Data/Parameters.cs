@@ -10,15 +10,16 @@ namespace MouseData
     class Parameters
     {
         public static readonly string TimeFlag;
-        public static readonly double SegmentRate;
         public static readonly int SegmentLength;
         public static readonly int FeedTime;
         public static readonly int Xseparate;
+        public static readonly double SegmentRate;
         public static readonly double XRate;
         public static readonly double YRate;
         public static readonly List<double> ColorRate;
         public static readonly List<double> ColorRadio;
         public static readonly List<Brush> ColorList;
+        public static readonly Type ShapeType;
 
         static Parameters()
         {
@@ -33,6 +34,17 @@ namespace MouseData
             ColorRate = GetDoubleList("ColorRate", new List<double>() { 0.8, 0.6, 0.4, 0.2, 0 });
             ColorRadio = GetDoubleList("ColorRadio", new List<double>() { 3, 2, 2, 1, 1 });
             ColorList = GetColorList("ColorList");
+            ShapeType = getShapeType("ShapeType", "Ellipse");
+        }
+
+        private static Type getShapeType(string tag, string def)
+        {
+            string t = GetString(tag, def);
+            if (t.ToLower() == "rectangle")
+            {
+                return new System.Windows.Shapes.Rectangle().GetType();
+            }
+            return new System.Windows.Shapes.Ellipse().GetType();
         }
 
         private static List<Brush> GetColorList(string tag)
