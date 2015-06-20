@@ -208,8 +208,8 @@ namespace MouseData
         {
             Type t = Parameters.ShapeType;
             Shape shape = (Shape)Activator.CreateInstance(t);
-            shape.Height = radio * 2 * Parameters.YRate;
-            shape.Width = radio * 2 * Parameters.XRate;
+            shape.Height = radio * 2;
+            shape.Width = radio * 2;
             shape.Margin = new Thickness(x - radio, cv.Height - y - radio, 0, 0);
             shape.Fill = bruch;
             cv.Children.Add(shape);
