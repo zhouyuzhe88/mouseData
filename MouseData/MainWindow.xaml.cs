@@ -101,7 +101,7 @@ namespace MouseData
         void bt_Click(object sender, RoutedEventArgs e)
         {
             Button bt = sender as Button;
-            Draw draw = new Draw(this.ButExp[bt]);
+            Draw draw = new Draw(new DrawHelper(this.ButExp[bt]));
             draw.Show();
         }
     }

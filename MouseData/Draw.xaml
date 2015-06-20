@@ -9,8 +9,8 @@
             </ScrollViewer.Content>
         </ScrollViewer>
         <ScrollViewer  HorizontalAlignment="Stretch" Margin="100,0,0,0" VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Auto">
-            <Grid Name="MainGrid"/>
+                      HorizontalScrollBarVisibility="Auto" Name="MainView">
+            <Canvas Name="MainCanvas" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         </ScrollViewer>
 
     </Grid>
