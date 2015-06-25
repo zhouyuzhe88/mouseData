@@ -37,7 +37,7 @@ namespace MouseData
             int s = Convert.ToInt32(matche["s"].Value);
             int ms = Convert.ToInt32(matche["ms"].Value);
             this.Time = new DateTime(2000, 1, 1, h, m, s, ms).AddHours(8);
-            if (this.Time.Hour >= 12)
+            if (this.Time.Hour > 12)
             {
                 this.Time = this.Time.AddHours(-12);
             }
