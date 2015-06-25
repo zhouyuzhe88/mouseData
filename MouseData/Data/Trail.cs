@@ -67,7 +67,7 @@ namespace MouseData
                     {
                         continue;
                     }
-                    Point p = seg.Points.Last().Position;
+                    Point p = seg.CenterPoint();
                     int area = p.X < Parameters.Xseparate ? 1 : (this.LR == "Left" ? 2 : 3);
                     int spk = (int)(seg.WaveList[i].Count / seg.Length * 1000);
                     sb.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5}", this.Id, this.LR, area, this.FoodCnt, i + 1, spk);

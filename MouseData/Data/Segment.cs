@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MouseData
 {
@@ -20,6 +21,17 @@ namespace MouseData
             {
                 WaveList[i] = new List<DateTime>();
             }
+        }
+
+        public Point CenterPoint()
+        {
+            if (Points.Count == 0)
+            {
+                return new Point(0, 0);
+            }
+            double x = 0, y = 0;
+            Points.ForEach(p => { x += p.Position.X; y += p.Position.Y; });
+            return new Point(x / Points.Count, y / Points.Count);
         }
     }
 }

@@ -107,10 +107,9 @@ namespace MouseData
         {
             Shape shape = (Shape)Activator.CreateInstance(Parameters.ShapeType);
             double radio = Parameters.ColorRadio[colorId];
-            double x = 0, y = 0;
-            seg.Points.ForEach(p => { x += p.Position.X; y += p.Position.Y; });
-            x = x * Parameters.XRate / seg.Points.Count;
-            y = (this.CavHeight + Exp.MaxY * Parameters.YRate) / 2 - y / seg.Points.Count * Parameters.YRate;
+            Point c = seg.CenterPoint();
+            double x = c.X * Parameters.XRate;
+            double y = (this.CavHeight + Exp.MaxY * Parameters.YRate) / 2 - c.Y * Parameters.YRate;
             shape.Margin = new Thickness(x - radio, CavHeight - y - radio, 0, 0);
             shape.Fill = Parameters.ColorList[colorId];
             shape.Width = shape.Height = radio * 2;
