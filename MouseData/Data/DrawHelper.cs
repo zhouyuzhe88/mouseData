@@ -171,7 +171,6 @@ namespace MouseData
             {
                 fLs.Add(Parameters.ColorRate[i] * fLs[0]);
             }
-            ++fLs[0];
             TextBlock blk = new TextBlock();
             blk.Text = "  ";
             colors.Children.Add(blk);
@@ -182,7 +181,7 @@ namespace MouseData
                 e.Fill = Parameters.ColorList[i];
                 colors.Children.Add(e);
                 TextBlock t = new TextBlock();
-                t.Text = " " + ((int)fLs[i] - 1) + " - " + (int)fLs[i + 1] + "HZ     ";
+                t.Text = " " + (int)Math.Round(fLs[i]) + " - " + (int)Math.Round(fLs[i + 1]) + "HZ     ";
                 t.FontSize *= Math.Min(1.2, Parameters.XRate * 1.4);
                 colors.Children.Add(t);
             }
