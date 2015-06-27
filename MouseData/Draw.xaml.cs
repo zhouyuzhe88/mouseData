@@ -45,7 +45,7 @@ namespace MouseData
         void AddButtons()
         {
             Button BtInfo = BuildBaseButton("Task Info", BtInfo_Click, Brushes.HotPink);
-            Button BtAnalysis = BuildBaseButton("Export Data", BtAnalysis_Click, Brushes.HotPink);
+            Button BtAnalysis = BuildBaseButton("Export Data", BtAnalysis_Click, Brushes.LightPink);
             Button BtExport = BuildBaseButton("Capture", BtExport_Click, Brushes.HotPink);
             AddSepatator();
             Button BtAll = BuildBaseButton("ALL", BtAll_Click, Brushes.Orange);
