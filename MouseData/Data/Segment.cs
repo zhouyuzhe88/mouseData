@@ -9,9 +9,11 @@ namespace MouseData
 {
     class Segment
     {
+
         public List<TimePoint> Points { get; set; }
         public List<DateTime>[] WaveList { get; set; }
         public double Length { get; set; }
+        public Trail Tra { get; set; }
 
         public Segment(int ChannelCnt)
         {
@@ -32,6 +34,12 @@ namespace MouseData
             double x = 0, y = 0;
             Points.ForEach(p => { x += p.Position.X; y += p.Position.Y; });
             return new Point(x / Points.Count, y / Points.Count);
+        }
+
+        public double GetXPos()
+        {
+            double x = CenterPoint().X;
+            return (x - Tra.Exp.MinX) / (Tra.Exp.MaxX - Tra.Exp.MinX);
         }
     }
 }

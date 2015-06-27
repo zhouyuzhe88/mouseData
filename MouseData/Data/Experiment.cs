@@ -13,9 +13,33 @@ namespace MouseData
         static Regex TaskReg { get; set; }
         public List<Trail> Trils { get; set; }
         public double MaxX { get; set; }
+        public double MinX { get; set; }
         public double MaxY { get; set; }
         public int Id { get; set; }
-        public string Tag { get; set; }
+        private string tag;
+        public string Tag
+        {
+            get
+            {
+                return tag;
+            }
+            set
+            {
+                tag = value;
+                string[] split = tag.Split('-');
+                if (split.Length == 2)
+                {
+                    Date = split[0];
+                    Rat = split[1];
+                }
+                else
+                {
+                    Date = Rat = "";
+                }
+            }
+        }
+        public string Date { get; set; }
+        public string Rat { get; set; }
         public string Task { get; set; }
         public int ChannelCnt { get; set; }
         public int[] MaxWaveCnt { get; set; }
@@ -23,7 +47,7 @@ namespace MouseData
 
         static Experiment()
         {
-            string pattern = @"Config=\s*(?<task>\S+)\[";
+            string pattern = @"[C|c]onfig\s*=\s*(?<task>\S+)\s*\[";
             TaskReg = new Regex(pattern);
         }
 
@@ -31,6 +55,7 @@ namespace MouseData
         {
             this.Trils = new List<Trail>();
             this.Task = TaskReg.IsMatch(input) ? TaskReg.Matches(input)[0].Groups["task"].Value : "";
+            MinX = 0x7fffffff;
         }
 
         public int GetColorId(int channelId, double WaveCnt)
@@ -54,7 +79,7 @@ namespace MouseData
         public void AnalysisSPK(bool[] trailUse)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("Trail\tL/R\tArea\tFood\tChannel\tSPK");
+            sb.Append("DATE\tRAT\tTASK\tEXP\tTRIAL\tORIENT\tREWARD\tAREA\tX_POS\tCHANNEL\tFR/BIN");
             sb.AppendLine();
             for (int i = 0; i < this.Trils.Count; ++i)
             {
@@ -73,11 +98,10 @@ namespace MouseData
             StringBuilder sb = new StringBuilder();
             sb.Append("DATE\tRAT\tTASK\tEXP\tTRIAL\tORIENT\tREWA\tTIME");
             sb.AppendLine();
-            string[] dar = this.Tag.Split('-');
             foreach (Trail t in Trils)
             {
                 double time = (t.EndTime - t.StartTime).TotalSeconds;
-                sb.Append(string.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}", dar[0], dar[1], Task, Id, t.Id, t.LR, t.FoodCnt, time));
+                sb.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}", Date, Rat, Task, Id, t.Id, t.LR, t.FoodCnt, time);
                 sb.AppendLine();
             }
             return sb.ToString();

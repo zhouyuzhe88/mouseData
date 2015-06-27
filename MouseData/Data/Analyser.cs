@@ -44,7 +44,7 @@ namespace MouseData
                     for (start = t.StartTime; start < t.EndTime; start = end)
                     {
                         end = start.AddMilliseconds(Parameters.SegmentLength) < t.EndTime ? start.AddMilliseconds(Parameters.SegmentLength) : t.EndTime;
-                        Segment seg = new Segment(this.ChannelCnt);
+                        Segment seg = new Segment(this.ChannelCnt) { Tra = t };
                         pi = InsertPoint(pi, exp, start, end, seg);
                         InssertWave(ti, exp, start, end, seg);
                         t.Segments.Add(seg);
@@ -89,6 +89,7 @@ namespace MouseData
                     {
                         seg.Points.Add(tp);
                         exp.MaxX = Math.Max(exp.MaxX, tp.Position.X);
+                        exp.MinX = Math.Min(exp.MinX, tp.Position.X);
                         exp.MaxY = Math.Max(exp.MaxY, tp.Position.Y);
                     }
                 }
@@ -155,8 +156,7 @@ namespace MouseData
                 }
                 else if (Trail.IsATrail(data))
                 {
-                    Trail t = new Trail(data);
-                    t.Exp = now;
+                    Trail t = new Trail(data) { Exp = now };
                     now.Trils.Add(t);
                 }
             }
