@@ -24,6 +24,8 @@ namespace MouseData
         Dictionary<Button, int> ButId { get; set; }
         DrawHelper Helper { get; set; }
         Experiment Exp { get; set; }
+        Button BtLeft { get; set; }
+        Button BtRight { get; set; }
 
         internal Draw(DrawHelper h)
         {
@@ -42,19 +44,28 @@ namespace MouseData
 
         void AddButtons()
         {
-            Button btInfo = BuildBaseButton("Task Info", BtInfo_Click, Brushes.HotPink);
-            Button btAnalysis = BuildBaseButton("Export Data", BtAnalysis_Click, Brushes.HotPink);
-            Button btExport = BuildBaseButton("Capture", BtExport_Click, Brushes.HotPink);
-            Rectangle separator = new Rectangle();
-            separator.Width = 80;
-            separator.Height = 10;
-            this.filter.Children.Add(separator);
-            Button btAll = BuildBaseButton("ALL", BtAll_Click, Brushes.Orange);
+            Button BtInfo = BuildBaseButton("Task Info", BtInfo_Click, Brushes.HotPink);
+            Button BtAnalysis = BuildBaseButton("Export Data", BtAnalysis_Click, Brushes.HotPink);
+            Button BtExport = BuildBaseButton("Capture", BtExport_Click, Brushes.HotPink);
+            AddSepatator();
+            Button BtAll = BuildBaseButton("ALL", BtAll_Click, Brushes.Orange);
+            BtLeft = BuildBaseButton("Left", BtLR_Click, Brushes.Orange);
+            BtRight = BuildBaseButton("Right", BtLR_Click, Brushes.Orange);
+            AddSepatator(5);
             for (int i = 0; i < Exp.Trils.Count; ++i)
             {
                 Button bt = BuildBaseButton("Trail" + Exp.Trils[i].Id, bt_Click);
                 ButId[bt] = i;
             }
+        }
+
+        private void AddSepatator(int height = 10)
+        {
+
+            Rectangle separator = new Rectangle();
+            separator.Width = 80;
+            separator.Height = height;
+            this.filter.Children.Add(separator);
         }
 
         void FixMargin()
@@ -149,64 +160,35 @@ namespace MouseData
             System.Windows.Forms.MessageBox.Show("Capture Done");
         }
 
+        void BtLR_Click(object sender, RoutedEventArgs e)
+        {
+            Button btLR = sender as Button;
+            string content = btLR.Content.ToString();
+            Brush target = btLR.Background == Brushes.Orange ? Brushes.Gold : Brushes.Gray;
+            btLR.Background = btLR.Background == Brushes.Orange ? Brushes.LightGray : Brushes.Orange;
+            ButId.Keys.ToList().Where(x => x.Background == target && Exp.Trils[ButId[x]].LR == content).ToList().ForEach(x => bt_Click(x, null));
+        }
+
         void BtAll_Click(object sender, RoutedEventArgs e)
         {
             Button btAll = sender as Button;
-            if (btAll.Background == Brushes.Orange)
-            {
-                btAll.Background = Brushes.LightGray;
-                for (int trailId = 0; trailId < Exp.Trils.Count; ++trailId)
-                {
-                    Helper.TrailUse[trailId] = false;
-                    foreach (Shape s in Helper.TrailElements[trailId])
-                    {
-                        s.Visibility = System.Windows.Visibility.Hidden;
-                    }
-                }
-                foreach (Button bt in ButId.Keys)
-                {
-                    bt.Background = Brushes.Gray;
-                }
-            }
-            else
-            {
-                btAll.Background = Brushes.Orange;
-                for (int trailId = 0; trailId < Exp.Trils.Count; ++trailId)
-                {
-                    Helper.TrailUse[trailId] = true;
-                    foreach (Shape s in Helper.TrailElements[trailId])
-                    {
-                        s.Visibility = System.Windows.Visibility.Visible;
-                    }
-                }
-                foreach (Button bt in ButId.Keys)
-                {
-                    bt.Background = Brushes.Gold;
-                }
-            }
+            Brush target = btAll.Background == Brushes.Orange ? Brushes.Gold : Brushes.Gray;
+            BtLeft.Background = BtRight.Background = btAll.Background = btAll.Background == Brushes.Orange ? Brushes.LightGray : Brushes.Orange;
+            ButId.Keys.ToList().Where(x => x.Background == target).ToList().ForEach(x => bt_Click(x, null));
         }
 
         void bt_Click(object sender, RoutedEventArgs e)
         {
             Button bt = sender as Button;
             int trailId = ButId[bt];
-            if (bt.Background == Brushes.Gold)
+            Brush color = bt.Background == Brushes.Gold ? Brushes.Gray : Brushes.Gold;
+            bool use = bt.Background != Brushes.Gold;
+            System.Windows.Visibility vis = bt.Background == Brushes.Gold ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
+            bt.Background = color;
+            Helper.TrailUse[trailId] = use;
+            foreach (Shape s in Helper.TrailElements[trailId])
             {
-                bt.Background = Brushes.Gray;
-                Helper.TrailUse[trailId] = false;
-                foreach (Shape s in Helper.TrailElements[trailId])
-                {
-                    s.Visibility = System.Windows.Visibility.Hidden;
-                }
-            }
-            else
-            {
-                bt.Background = Brushes.Gold;
-                Helper.TrailUse[trailId] = true;
-                foreach (Shape s in Helper.TrailElements[trailId])
-                {
-                    s.Visibility = System.Windows.Visibility.Visible;
-                }
+                s.Visibility = vis;
             }
         }
     }
