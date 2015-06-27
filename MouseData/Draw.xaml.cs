@@ -42,8 +42,9 @@ namespace MouseData
 
         void AddButtons()
         {
+            Button btInfo = BuildBaseButton("Task Info", BtInfo_Click, Brushes.HotPink);
             Button btAnalysis = BuildBaseButton("Export Data", BtAnalysis_Click, Brushes.HotPink);
-            Button btExport = BuildBaseButton("Capture", btExport_Click, Brushes.HotPink);
+            Button btExport = BuildBaseButton("Capture", BtExport_Click, Brushes.HotPink);
             Rectangle separator = new Rectangle();
             separator.Width = 80;
             separator.Height = 10;
@@ -128,7 +129,13 @@ namespace MouseData
             System.Windows.Forms.MessageBox.Show("Export Data Done");
         }
 
-        void btExport_Click(object sender, RoutedEventArgs e)
+        void BtInfo_Click(object sender, RoutedEventArgs e)
+        {
+            string info = Exp.GetInfo();
+            new SimpleOutput(this.Title + " Task Info", info).Show();
+        }
+
+        void BtExport_Click(object sender, RoutedEventArgs e)
         {
             RenderTargetBitmap bmp = new RenderTargetBitmap((int)MainCanvas.Width, (int)MainCanvas.Height, 96, 96, PixelFormats.Pbgra32);
             bmp.Render(MainCanvas);
@@ -202,6 +209,5 @@ namespace MouseData
                 }
             }
         }
-
     }
 }

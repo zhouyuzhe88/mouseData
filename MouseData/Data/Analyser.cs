@@ -151,7 +151,7 @@ namespace MouseData
                     {
                         Experiments.Add(now);
                     }
-                    now = new Experiment() { Id = id++ };
+                    now = new Experiment(data) { Id = id++ };
                 }
                 else if (Trail.IsATrail(data))
                 {

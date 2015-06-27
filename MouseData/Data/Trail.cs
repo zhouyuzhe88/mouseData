@@ -13,8 +13,7 @@ namespace MouseData
         static Regex Line { get; set; }
         static DateTime LastTime { get; set; }
 
-        private int FoodCnt { get; set; }
-
+        public int FoodCnt { get; set; }
         public int Id { get; set; }
         public string LR { get; set; }
         public DateTime StartTime { get; set; }

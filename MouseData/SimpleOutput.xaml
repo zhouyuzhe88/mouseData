@@ -1,0 +1,8 @@
+﻿<Window x:Class="MouseData.SimpleOutput"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SimpleOutput" Height="350" Width="450" MinHeight="100" MinWidth="250">
+    <Grid>
+        <TextBox Name="Tbinfo" IsReadOnly="True"/>
+    </Grid>
+</Window>

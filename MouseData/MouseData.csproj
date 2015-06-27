@@ -65,6 +65,9 @@
     </Compile>
     <Compile Include="Data\TimePoint.cs" />
     <Compile Include="Data\Trail.cs" />
+    <Compile Include="SimpleOutput.xaml.cs">
+      <DependentUpon>SimpleOutput.xaml</DependentUpon>
+    </Compile>
     <Page Include="Draw.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -84,6 +87,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SimpleOutput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
