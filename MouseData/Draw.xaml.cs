@@ -42,20 +42,20 @@ namespace MouseData
 
         void AddButtons()
         {
-            Button btAnalysis = BuildBaseButton("Analysis");
-            btAnalysis.Click += BtAnalysis_Click;
-            Button btExport = BuildBaseButton("Export");
-            btExport.Click += btExport_Click;
-            Button btAll = BuildBaseButton("ALL");
-            btAll.Click += BtAll_Click;
+            Button btAnalysis = BuildBaseButton("Export Data", BtAnalysis_Click, Brushes.HotPink);
+            Button btExport = BuildBaseButton("Capture", btExport_Click, Brushes.HotPink);
+            Rectangle separator = new Rectangle();
+            separator.Width = 80;
+            separator.Height = 10;
+            this.filter.Children.Add(separator);
+            Button btAll = BuildBaseButton("ALL", BtAll_Click, Brushes.Orange);
             for (int i = 0; i < Exp.Trils.Count; ++i)
             {
-                Button bt = BuildBaseButton("Trail" + Exp.Trils[i].Id);
+                Button bt = BuildBaseButton("Trail" + Exp.Trils[i].Id, bt_Click);
                 ButId[bt] = i;
-                bt.Click += bt_Click;
             }
         }
-        
+
         void FixMargin()
         {
             for (int channelId = 0; channelId < Helper.ChannelCnt; ++channelId)
@@ -108,15 +108,16 @@ namespace MouseData
             }
         }
 
-        Button BuildBaseButton(string content)
+        Button BuildBaseButton(string content, RoutedEventHandler action, SolidColorBrush color = null)
         {
             Button bt = new Button();
             bt.Focusable = false;
-            bt.Background = Brushes.Gold;
+            bt.Background = (color == null ? Brushes.Gold : color);
             bt.Content = content;
             bt.Height = 40;
             bt.Width = 80;
             bt.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            bt.Click += action;
             this.filter.Children.Add(bt);
             return bt;
         }
@@ -124,7 +125,7 @@ namespace MouseData
         void BtAnalysis_Click(object sender, RoutedEventArgs e)
         {
             this.Exp.AnalysisSPK(this.Helper.TrailUse);
-            System.Windows.Forms.MessageBox.Show("Analysis SPK Done");
+            System.Windows.Forms.MessageBox.Show("Export Data Done");
         }
 
         void btExport_Click(object sender, RoutedEventArgs e)
@@ -138,15 +139,15 @@ namespace MouseData
             {
                 encoder.Save(stm);
             }
-            System.Windows.Forms.MessageBox.Show("Export Done");
+            System.Windows.Forms.MessageBox.Show("Capture Done");
         }
 
         void BtAll_Click(object sender, RoutedEventArgs e)
         {
             Button btAll = sender as Button;
-            if (btAll.Background == Brushes.Gold)
+            if (btAll.Background == Brushes.Orange)
             {
-                btAll.Background = Brushes.Gray;
+                btAll.Background = Brushes.LightGray;
                 for (int trailId = 0; trailId < Exp.Trils.Count; ++trailId)
                 {
                     Helper.TrailUse[trailId] = false;
@@ -162,7 +163,7 @@ namespace MouseData
             }
             else
             {
-                btAll.Background = Brushes.Gold;
+                btAll.Background = Brushes.Orange;
                 for (int trailId = 0; trailId < Exp.Trils.Count; ++trailId)
                 {
                     Helper.TrailUse[trailId] = true;
