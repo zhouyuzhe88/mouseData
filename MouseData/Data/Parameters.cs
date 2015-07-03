@@ -54,11 +54,11 @@ namespace MouseData
             List<Brush> res = new List<Brush>();
             if (argb.Count == 0)
             {
-                res.Add(Brushes.Red);
-                res.Add(Brushes.Orange);
-                res.Add(Brushes.Yellow);
-                res.Add(Brushes.Green);
-                res.Add(Brushes.Blue);
+                res.Add(Brushes.Crimson);
+                res.Add(Brushes.Gold);
+                res.Add(Brushes.YellowGreen);
+                res.Add(Brushes.RoyalBlue);
+                res.Add(Brushes.Navy);
                 return res;
             }
             if (argb.Count % 4 != 0)
