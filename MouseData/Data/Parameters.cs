@@ -26,14 +26,14 @@ namespace MouseData
         {
             var settings = System.Configuration.ConfigurationManager.AppSettings;
             TimeFlag = GetString("TimeFlag", "EVT03");
-            SegmentRate = GetDouble("SegmentRate", 0.4);
+            SegmentRate = GetDouble("SegmentRate", 0.5);
             SegmentLength = GetInt("SegmentLength", 100);
             FeedTime = GetInt("FeedTime", 400);
             Xseparate = GetInt("Xseparate", 210);
             XRate = GetDouble("XRate", 1);
             YRate = GetDouble("YRate", 1);
             ColorRate = GetDoubleList("ColorRate", new List<double>() { 0.8, 0.6, 0.4, 0.2, 0 });
-            ColorRadio = GetDoubleList("ColorRadio", new List<double>() { 3, 2, 2, 1, 1 });
+            ColorRadio = GetDoubleList("ColorRadio", new List<double>() { 5, 4, 3, 2, 1 });
             ColorList = GetColorList("ColorList");
             ShapeType = getShapeType("ShapeType", "Ellipse");
             AreaColor = GetString("AreaColor", "0") == "1";
