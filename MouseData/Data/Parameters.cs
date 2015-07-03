@@ -20,6 +20,7 @@ namespace MouseData
         public static readonly List<double> ColorRadio;
         public static readonly List<Brush> ColorList;
         public static readonly Type ShapeType;
+        public static readonly bool AreaColor;
 
         static Parameters()
         {
@@ -35,6 +36,7 @@ namespace MouseData
             ColorRadio = GetDoubleList("ColorRadio", new List<double>() { 3, 2, 2, 1, 1 });
             ColorList = GetColorList("ColorList");
             ShapeType = getShapeType("ShapeType", "Ellipse");
+            AreaColor = GetString("AreaColor", "0") == "1";
         }
 
         private static Type getShapeType(string tag, string def)

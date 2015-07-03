@@ -106,10 +106,15 @@ namespace MouseData
         private Shape BuildShape(Segment seg, int colorId)
         {
             Shape shape = (Shape)Activator.CreateInstance(Parameters.ShapeType);
-            double radio = Parameters.ColorRadio[colorId];
             Point c = seg.CenterPoint();
             double x = c.X * Parameters.XRate;
             double y = (this.CavHeight + Exp.MaxY * Parameters.YRate) / 2 - c.Y * Parameters.YRate;
+            if (Parameters.AreaColor)
+            {
+                int area = x < Parameters.Xseparate ? 1 : (seg.Tra.LR == "Left" ? 2 : 3);
+                colorId = area - 1;
+            }
+            double radio = Parameters.ColorRadio[colorId];
             shape.Margin = new Thickness(x - radio, CavHeight - y - radio, 0, 0);
             shape.Fill = Parameters.ColorList[colorId];
             shape.Width = shape.Height = radio * 2;
