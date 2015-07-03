@@ -91,6 +91,8 @@ namespace MouseData
                         exp.MaxX = Math.Max(exp.MaxX, tp.Position.X);
                         exp.MinX = Math.Min(exp.MinX, tp.Position.X);
                         exp.MaxY = Math.Max(exp.MaxY, tp.Position.Y);
+                        seg.Tra.MinX = Math.Min(seg.Tra.MinX, tp.Position.X);
+                        seg.Tra.MaxX = Math.Max(seg.Tra.MaxX, tp.Position.X);
                     }
                 }
                 else if (tp.Time > end)

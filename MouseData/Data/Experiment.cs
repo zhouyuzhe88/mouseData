@@ -79,7 +79,7 @@ namespace MouseData
         public void AnalysisSPK(bool[] trailUse)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("DATE\tRAT\tTASK\tEXP\tTRIAL\tORIENT\tREWARD\tAREA\tX_POS\tCHANNEL\tFR/BIN");
+            sb.Append("DATE\tCell\tRAT\tCHANNEL\tTASK\tEXP\tTRIAL\tORIENT\tREWARD\tAREA\tX_POS\tFR/BIN");
             sb.AppendLine();
             for (int i = 0; i < this.Trils.Count; ++i)
             {

@@ -20,6 +20,8 @@ namespace MouseData
         public DateTime EndTime { get; set; }
         public List<Segment> Segments { get; set; }
         public Experiment Exp { get; set; }
+        public double MaxX { get; set; }
+        public double MinX { get; set; }
 
         static Trail()
         {
@@ -53,6 +55,7 @@ namespace MouseData
             this.EndTime = baseTime.AddMilliseconds(-FoodCnt * Parameters.FeedTime);
             this.StartTime = this.EndTime.AddMilliseconds(start - end);
             this.Segments = new List<Segment>();
+            this.MinX = 0x7fffffff;
         }
 
         public string Analsys()
@@ -70,8 +73,9 @@ namespace MouseData
                     int area = p.X < Parameters.Xseparate ? 1 : (this.LR == "Left" ? 2 : 3);
                     int spk = (int)(seg.WaveList[i].Count / seg.Length * 1000);
                     string channelId = Exp.ChannelTag[i].Replace("SPK", "").Replace("a", "");
-                    sb.AppendFormat("{0}\t{1}\t{2}\t{3}\t", Exp.Date, Exp.Rat, Exp.Task, Exp.Id);
-                    sb.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4:0.000}\t{5}\t{6}", this.Id, this.LR, this.FoodCnt, area, seg.GetXPos(), channelId, spk);
+                    string cell = string.Format("{0:00}{1:00}", Exp.Rat, channelId);
+                    sb.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t", Exp.Date, cell, Exp.Rat, channelId, Exp.Task);
+                    sb.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5:0.000}\t{6}", Exp.Id, this.Id, this.LR, this.FoodCnt, area, seg.GetXPos(), spk);
                     sb.AppendLine();
                 }
             }
