@@ -45,7 +45,7 @@ namespace MouseData
         void AddButtons()
         {
             Button BtInfo = BuildBaseButton("Task Info", BtInfo_Click, Brushes.HotPink);
-            Button BtAnalysis = BuildBaseButton("Export Data", BtAnalysis_Click, Brushes.LightPink);
+            //Button BtAnalysis = BuildBaseButton("Export Data", BtAnalysis_Click, Brushes.LightPink);
             Button BtExport = BuildBaseButton("Capture", BtExport_Click, Brushes.HotPink);
             AddSepatator();
             Button BtAll = BuildBaseButton("ALL", BtAll_Click, Brushes.Orange);
@@ -132,12 +132,6 @@ namespace MouseData
             bt.Click += action;
             this.filter.Children.Add(bt);
             return bt;
-        }
-
-        void BtAnalysis_Click(object sender, RoutedEventArgs e)
-        {
-            this.Exp.AnalysisSPK(this.Helper.TrailUse);
-            System.Windows.Forms.MessageBox.Show("Export Data Done");
         }
 
         void BtInfo_Click(object sender, RoutedEventArgs e)

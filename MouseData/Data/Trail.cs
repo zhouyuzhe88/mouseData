@@ -58,9 +58,8 @@ namespace MouseData
             this.MinX = 0x7fffffff;
         }
 
-        public string Analsys()
+        public void Analsys(StringBuilder sb)
         {
-            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < Exp.ChannelCnt; ++i)
             {
                 foreach (Segment seg in this.Segments)
@@ -79,7 +78,6 @@ namespace MouseData
                     sb.AppendLine();
                 }
             }
-            return sb.ToString();
         }
     }
 }

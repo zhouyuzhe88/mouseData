@@ -76,21 +76,12 @@ namespace MouseData
             return i;
         }
 
-        public void AnalysisSPK(bool[] trailUse)
+        public void AnalysisSPK(StringBuilder sb)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("DATE\tCell\tRAT\tCHANNEL\tTASK\tEXP\tTRIAL\tORIENT\tREWARD\tAREA\tX_POS\tFR/BIN");
-            sb.AppendLine();
             for (int i = 0; i < this.Trils.Count; ++i)
             {
-                if (trailUse[i])
-                {
-                    sb.Append(this.Trils[i].Analsys());
-                }
+                this.Trils[i].Analsys(sb);
             }
-            string res = sb.ToString();
-            string fileName = string.Format("{0}-{1}-{2}-{3}-analysis.txt", this.Tag, this.Id, DateTime.Now.Hour, DateTime.Now.Minute);
-            File.WriteAllText(fileName, res, Encoding.Default);
         }
 
         public string GetInfo()

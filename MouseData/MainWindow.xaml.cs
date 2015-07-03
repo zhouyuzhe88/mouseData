@@ -84,6 +84,15 @@ namespace MouseData
             this.exps.Children.Clear();
             this.Analyser = new Analyser(MoveFileTb.Text, BehaveFileTb.Text, WaveFileTb.Text);
             this.Analyser.Work();
+            Button bt_export = new Button();
+            bt_export.Height = 30;
+            bt_export.Focusable = false;
+            bt_export.Click += bt_export_Click;
+            bt_export.Content = "Export Data";
+            this.exps.Children.Add(bt_export);
+            Rectangle rec = new Rectangle();
+            rec.Height = 10;
+            this.exps.Children.Add(rec);
             ButExp = new Dictionary<Button, Experiment>();
             foreach (Experiment exp in this.Analyser.Experiments)
             {
@@ -96,6 +105,18 @@ namespace MouseData
                 ButExp[bt] = exp;
                 this.exps.Children.Add(bt);
             }
+        }
+
+        void bt_export_Click(object sender, RoutedEventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("DATE\tCell\tRAT\tCHANNEL\tTASK\tEXP\tTRIAL\tORIENT\tREWARD\tAREA\tX_POS\tFR/BIN");
+            sb.AppendLine();
+            Analyser.Experiments.ForEach(exp => exp.AnalysisSPK(sb));
+            string res = sb.ToString();
+            string fileName = string.Format("{0}-{1}-{2}-analysis.txt", this.BehaveFileTb.Text.Replace(".txt", ""), DateTime.Now.Hour, DateTime.Now.Minute);
+            File.WriteAllText(fileName, res, Encoding.Default);
+            System.Windows.Forms.MessageBox.Show("Export Data Done");
         }
 
         void bt_Click(object sender, RoutedEventArgs e)
