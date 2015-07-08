@@ -92,10 +92,30 @@ namespace MouseData
             foreach (Trail t in Trils)
             {
                 double time = (t.EndTime - t.StartTime).TotalSeconds;
-                sb.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}", Date, Rat, Task, Id, t.Id, t.LR, t.FoodCnt, time);
+                sb.AppendFormat("{0}\t#{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}", Date, Rat, SwitchTask(), Id, t.Id, t.LR, t.FoodCnt, time);
                 sb.AppendLine();
             }
             return sb.ToString();
+        }
+
+        public string SwitchTask()
+        {
+            string tsk;
+            switch (Task)
+            {
+                case "1:4":
+                case "4:1":
+                    tsk = "fix";
+                    break;
+                case "1:1":
+                case "4:4":
+                    tsk = "equal";
+                    break;
+                default:
+                    tsk = Task;
+                    break;
+            }
+            return tsk;
         }
     }
 }

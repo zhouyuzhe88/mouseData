@@ -69,11 +69,11 @@ namespace MouseData
                         continue;
                     }
                     Point p = seg.CenterPoint();
-                    int area = p.X < Parameters.Xseparate ? 1 : (this.LR == "Left" ? 2 : 3);
+                    string area = p.X < Parameters.Xseparate ? "STEM" : "PRE-REWARD";
                     int spk = (int)(seg.WaveList[i].Count / seg.Length * 1000);
                     string channelId = Exp.ChannelTag[i].Replace("SPK", "").Replace("a", "");
                     string cell = string.Format("{0:00}{1:00}", Exp.Rat, channelId);
-                    sb.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t", Exp.Date, cell, Exp.Rat, channelId, Exp.Task);
+                    sb.AppendFormat("{0}\t{1}\t#{2}\t{3}\t{4}\t", Exp.Date, cell, Exp.Rat, channelId, Exp.SwitchTask());
                     sb.AppendFormat("{0}\t{1}\t{2}\t{3}\t{4}\t{5:0.0}\t{6}", Exp.Id, this.Id, this.LR, this.FoodCnt, area, Math.Round(seg.GetXPos(), 1), spk);
                     sb.AppendLine();
                 }
