@@ -39,7 +39,7 @@ namespace MouseData
         public double GetXPos()
         {
             double x = CenterPoint().X;
-            return (x - Tra.MinX) / (Tra.MaxX - Tra.MinX);
+            return (x - Parameters.MinX) / (Parameters.MaxX - Parameters.MinX);
         }
     }
 }
