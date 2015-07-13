@@ -116,7 +116,7 @@ namespace MouseData
                 return;
             }
             double startTime = Convert.ToDouble(waveMeta[1][timeInd]);
-            string pattern = "SPK(\\d*)a";
+            string pattern = "SPK(\\d*)[a-e]";
             Regex r = new Regex(pattern);
             MatchCollection matches = r.Matches(WaveData[0]);
             ChannelCnt = matches.Count;
