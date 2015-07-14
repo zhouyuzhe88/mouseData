@@ -36,10 +36,13 @@ namespace MouseData
             return new Point(x / Points.Count, y / Points.Count);
         }
 
-        public double GetXPos()
+        public int GetXPos()
         {
-            double x = CenterPoint().X;
-            return (x - Parameters.MinX) / (Parameters.MaxX - Parameters.MinX);
+            int x = (int)Math.Round(CenterPoint().X) - 1;
+            int dx = (Parameters.MaxX - Parameters.MinX) / 10;
+            int tmp = (x - Parameters.MinX) / dx + 1;
+            tmp = Math.Min(Math.Max(1, tmp), 10);
+            return 5 * tmp;
         }
     }
 }
