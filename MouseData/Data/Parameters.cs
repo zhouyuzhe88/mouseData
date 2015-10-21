@@ -23,6 +23,11 @@ namespace MouseData
         public static readonly List<Brush> ColorList;
         public static readonly Type ShapeType;
         public static readonly bool AreaColor;
+        public static readonly int XStart;
+        public static readonly int XEnd;
+        public static readonly int YStart;
+        public static readonly int YEnd;
+        public static readonly int MLen;
 
         static Parameters()
         {
@@ -41,6 +46,11 @@ namespace MouseData
             ColorList = GetColorList("ColorList");
             ShapeType = getShapeType("ShapeType", "Ellipse");
             AreaColor = GetString("AreaColor", "0") == "1";
+            XStart = GetInt("XStart", 50);
+            XEnd = GetInt("XEnd", 490);
+            YStart = GetInt("YStart", 25);
+            YEnd = GetInt("YEnd", 275);
+            MLen = GetInt("MLen", 10);
         }
 
         private static Type getShapeType(string tag, string def)

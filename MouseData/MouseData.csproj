@@ -58,6 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Data\MatrixHelper.cs" />
     <Compile Include="Data\Parameters.cs" />
     <Compile Include="Data\Segment.cs" />
     <Compile Include="Draw.xaml.cs">
