@@ -4,16 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace MouseData.Data
+namespace MouseData
 {
     class MatrixHelper
     {
         public Experiment Exp { get; set; }
-        public double[] MaxAvgWave { get; set; }
 
         public List<Shape>[] Elementes { get; set; }
+        public double[] MaxAvgWave { get; set; }
 
         private int RowCnt { get; set; }
         private int ColCnt { get; set; }
@@ -35,16 +37,55 @@ namespace MouseData.Data
             this.Exp = exp;
             Init();
             Calculate();
+            AddElement();
+        }
+
+        private void AddElement()
+        {
+
             for (int ch = 0; ch < ChanelCnt; ++ch)
             {
                 for (int row = 0; row < RowCnt; ++row)
                 {
                     for (int col = 0; col < ColCnt; ++col)
                     {
-                        double rate = (double)WaveSum[ch][row][col] / PointCnt[ch][row][col];
+                        Shape s = new Rectangle();
+                        VisualBrush b = new VisualBrush();
+                        Label l = new Label();
+                        l.Background = CalColor(ch, row, col);
+                        l.Content = PointCnt[ch][row][col];
+                        l.Foreground = Brushes.White;
+                        b.Visual = l;
+                        s.Fill = b;
+                        s.Width = s.Height = Parameters.MLen * 2;
+                        s.Margin = new Thickness(col * Parameters.MLen * 2, row * Parameters.MLen * 2, 0, 0);
+                        Elementes[ch].Add(s);
                     }
                 }
             }
+        }
+
+        private Brush CalColor(int ch, int row, int col)
+        {
+            Brush brush;
+            if (PointCnt[ch][row][col] == 0)
+            {
+                brush = Brushes.White;
+            }
+            else
+            {
+                double rate = (double)WaveSum[ch][row][col] / PointCnt[ch][row][col];
+                int colorId;
+                for (colorId = 0; colorId < Parameters.ColorRate.Count; ++colorId)
+                {
+                    if (rate >= Parameters.ColorRate[colorId])
+                    {
+                        break;
+                    }
+                }
+                brush = Parameters.ColorList[colorId];
+            }
+            return brush;
         }
 
         private void Calculate()
@@ -61,7 +102,7 @@ namespace MouseData.Data
                         for (int ch = 0; ch < ChanelCnt; ++ch)
                         {
                             ++PointCnt[ch][row][col];
-                            WaveSum[ch][row][col] += seg.WaveList[ch].Count / (int)seg.Length * Parameters.SegmentLength;
+                            WaveSum[ch][row][col] += seg.WaveList[ch].Count * Parameters.SegmentLength / (int)seg.Length;
                         }
                     }
                 }
