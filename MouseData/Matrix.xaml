@@ -1,15 +1,15 @@
 ﻿<Window x:Class="MouseData.Matrix"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Matrix" Icon="icon.ico" MinHeight="200" MinWidth="300">
+        Title="Matrix" Icon="icon.ico" MinHeight="200" MinWidth="200">
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto"  HorizontalScrollBarVisibility="Disabled"
-                      HorizontalAlignment="Left" Margin="0,0,0,0" Width="100">
+                      HorizontalAlignment="Left" Margin="0,0,0,0" Width="00">
             <ScrollViewer.Content>
                 <StackPanel Name="Menu" Orientation="Vertical"/>
             </ScrollViewer.Content>
         </ScrollViewer>
-        <ScrollViewer  HorizontalAlignment="Stretch" Margin="100,0,0,0" VerticalScrollBarVisibility="Auto"
+        <ScrollViewer  HorizontalAlignment="Stretch" Margin="00,0,0,0" VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Auto" Name="MainView">
             <Canvas Name="MainCanvas" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         </ScrollViewer>

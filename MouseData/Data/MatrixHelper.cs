@@ -15,11 +15,15 @@ namespace MouseData
         public Experiment Exp { get; set; }
 
         public List<Shape>[] Elementes { get; set; }
+        public StackPanel[] Titles { get; set; }
         public double[] MaxAvgWave { get; set; }
-
+        public int ChannelCnt { get; set; }
+        public int CavHeight { get; set; }
+        public int CavWidth { get; set; }
         private int RowCnt { get; set; }
         private int ColCnt { get; set; }
-        private int ChanelCnt { get; set; }
+        private bool MaxOnly { get; set; }
+
         private int XStart { get; set; }
         private int XEnd { get; set; }
         private int YStart { get; set; }
@@ -32,9 +36,12 @@ namespace MouseData
 
         private int[][][] WaveSum { get; set; }
 
-        public MatrixHelper(Experiment exp)
+        private int MLen { get; set; }
+
+        public MatrixHelper(Experiment exp, bool maxOnly = true)
         {
             this.Exp = exp;
+            this.MaxOnly = maxOnly;
             Init();
             Calculate();
             AddElement();
@@ -42,26 +49,34 @@ namespace MouseData
 
         private void AddElement()
         {
-
-            for (int ch = 0; ch < ChanelCnt; ++ch)
+            for (int ch = 0; ch < ChannelCnt; ++ch)
             {
                 for (int row = 0; row < RowCnt; ++row)
                 {
                     for (int col = 0; col < ColCnt; ++col)
                     {
                         Shape s = new Rectangle();
-                        VisualBrush b = new VisualBrush();
+                        s.Fill = CalColor(ch, row, col);
+                        /*VisualBrush b = new VisualBrush();
                         Label l = new Label();
                         l.Background = CalColor(ch, row, col);
                         l.Content = PointCnt[ch][row][col];
                         l.Foreground = Brushes.White;
                         b.Visual = l;
-                        s.Fill = b;
-                        s.Width = s.Height = Parameters.MLen * 2;
-                        s.Margin = new Thickness(col * Parameters.MLen * 2, row * Parameters.MLen * 2, 0, 0);
+                        s.Fill = b;*/
+                        s.Width = s.Height = MLen;
+                        s.Margin = new Thickness(col * MLen + 5, row * MLen + 5 + 30 * Parameters.Rate, 0, 0);
                         Elementes[ch].Add(s);
                     }
                 }
+                Rectangle rec = new Rectangle();
+                rec.Height = RowCnt * MLen + 10 + 30 * Parameters.Rate;
+                rec.Width = ColCnt * MLen + 10;
+                rec.Fill = Brushes.Transparent;
+                rec.StrokeThickness = 2;
+                rec.Stroke = Brushes.Black;
+                Elementes[ch].Add(rec);
+                Titles[ch] = DrawHelper.BuildTitle(Exp.ChannelTag[ch], MaxAvgWave[ch], 0.7);
             }
         }
 
@@ -92,6 +107,10 @@ namespace MouseData
         {
             foreach (Trail tr in Exp.Trils)
             {
+                if (MaxOnly && tr.FoodCnt != 4)
+                {
+                    continue;
+                }
                 foreach (Segment seg in tr.Segments)
                 {
                     Point p = seg.CenterPoint();
@@ -99,7 +118,7 @@ namespace MouseData
                     int col = ((int)(p.X - XStart)) / Parameters.MLen;
                     if (0 <= row && row < RowCnt && 0 <= col && col < ColCnt)
                     {
-                        for (int ch = 0; ch < ChanelCnt; ++ch)
+                        for (int ch = 0; ch < ChannelCnt; ++ch)
                         {
                             ++PointCnt[ch][row][col];
                             WaveSum[ch][row][col] += seg.WaveList[ch].Count * Parameters.SegmentLength / (int)seg.Length;
@@ -107,7 +126,7 @@ namespace MouseData
                     }
                 }
             }
-            for (int ch = 0; ch < ChanelCnt; ++ch)
+            for (int ch = 0; ch < ChannelCnt; ++ch)
             {
                 for (int row = 0; row < RowCnt; ++row)
                 {
@@ -124,19 +143,21 @@ namespace MouseData
 
         private void Init()
         {
-
             XStart = Parameters.XStart;
             XEnd = Parameters.XEnd;
-            ColCnt = (XEnd - XStart) / Parameters.MLen;
             YStart = Parameters.YStart;
             YEnd = Parameters.YEnd;
+            CavHeight = (int)((YEnd - YStart + 30) * Parameters.Rate);
+            CavWidth = (int)((XEnd - XStart) * Parameters.Rate);
+            MLen = (int)(Parameters.MLen * Parameters.Rate);
+            ColCnt = (XEnd - XStart) / Parameters.MLen;
             RowCnt = (YEnd - YStart) / Parameters.MLen;
-            ChanelCnt = Exp.ChannelCnt;
+            ChannelCnt = Exp.ChannelCnt;
 
-            MaxAvgWave = new double[ChanelCnt];
-            PointCnt = new int[ChanelCnt][][];
-            WaveSum = new int[ChanelCnt][][];
-            for (int i = 0; i < ChanelCnt; ++i)
+            MaxAvgWave = new double[ChannelCnt];
+            PointCnt = new int[ChannelCnt][][];
+            WaveSum = new int[ChannelCnt][][];
+            for (int i = 0; i < ChannelCnt; ++i)
             {
                 PointCnt[i] = new int[RowCnt][];
                 WaveSum[i] = new int[RowCnt][];
@@ -147,11 +168,13 @@ namespace MouseData
                 }
             }
 
-            Elementes = new List<Shape>[ChanelCnt];
-            for (int i = 0; i < ChanelCnt; ++i)
+            Elementes = new List<Shape>[ChannelCnt];
+            for (int i = 0; i < ChannelCnt; ++i)
             {
                 Elementes[i] = new List<Shape>();
             }
+            Titles = new StackPanel[ChannelCnt];
         }
+
     }
 }

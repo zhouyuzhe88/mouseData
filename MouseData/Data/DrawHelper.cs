@@ -46,8 +46,8 @@ namespace MouseData
             this.ColorCnt = Parameters.ColorRate.Count;
             this.RowCnt = (this.ChannelCnt / 4 + (this.ChannelCnt % 4 == 0 ? 0 : 1));
             this.ColCnt = this.ChannelCnt <= 4 ? this.ChannelCnt : 4;
-            this.CavWidth = (int)(((int)Exp.MaxX / 50 + ((int)Exp.MaxX % 50 == 0 ? 0 : 1)) * 50 * Parameters.XRate + 50);
-            this.CavHeight = (int)(((int)Exp.MaxY / 50 + ((int)Exp.MaxY % 50 == 0 ? 0 : 1)) * 50 * Parameters.YRate + 50);
+            this.CavWidth = (int)(((int)Exp.MaxX / 50 + ((int)Exp.MaxX % 50 == 0 ? 0 : 1)) * 50 * Parameters.Rate + 50);
+            this.CavHeight = (int)(((int)Exp.MaxY / 50 + ((int)Exp.MaxY % 50 == 0 ? 0 : 1)) * 50 * Parameters.Rate + 50);
             Elementes = new List<Shape>[ColorCnt][][];
             for (int i = 0; i < ColorCnt; ++i)
             {
@@ -98,7 +98,7 @@ namespace MouseData
         {
             for (int i = 0; i < ChannelCnt; ++i)
             {
-                Titles[i] = BuildTitle(i);
+                Titles[i] = BuildTitle(Exp.ChannelTag[i], Exp.MaxWaveCnt[i]);
                 Axises[i] = BuildAxis();
             }
         }
@@ -107,8 +107,8 @@ namespace MouseData
         {
             Shape shape = (Shape)Activator.CreateInstance(Parameters.ShapeType);
             Point c = seg.CenterPoint();
-            double x = c.X * Parameters.XRate;
-            double y = (this.CavHeight + Exp.MaxY * Parameters.YRate) / 2 - c.Y * Parameters.YRate;
+            double x = c.X * Parameters.Rate;
+            double y = (this.CavHeight + Exp.MaxY * Parameters.Rate) / 2 - c.Y * Parameters.Rate;
             double radio = Parameters.ColorRadio[colorId];
             if (Parameters.AreaColor)
             {
@@ -141,7 +141,7 @@ namespace MouseData
             lineY.Stroke = Brushes.DarkGray;
             lineY.StrokeThickness = 2;
             axis.Add(lineY);
-            for (double i = 0; i < CavWidth; i += 50 * Parameters.XRate)
+            for (double i = 0; i < CavWidth; i += 50 * Parameters.Rate)
             {
                 Ellipse e = new Ellipse();
                 double r = 1.5;
@@ -150,7 +150,7 @@ namespace MouseData
                 e.Fill = Brushes.Black;
                 axis.Add(e);
             }
-            for (double i = 0; i < CavHeight; i += 50 * Parameters.YRate)
+            for (double i = 0; i < CavHeight; i += 50 * Parameters.Rate)
             {
                 Ellipse e = new Ellipse();
                 double r = 1.5;
@@ -162,16 +162,16 @@ namespace MouseData
             return axis;
         }
 
-        private StackPanel BuildTitle(int channelId)
+        public static StackPanel BuildTitle(string channelTag, double maxWave, double rate = 1)
         {
             StackPanel res = new StackPanel();
             res.Orientation = Orientation.Vertical;
             TextBlock tb = new TextBlock();
-            tb.Text = "  " + Exp.ChannelTag[channelId];
+            tb.Text = "  " + channelTag;
             res.Children.Add(tb);
             StackPanel colors = new StackPanel();
             colors.Orientation = Orientation.Horizontal;
-            List<double> fLs = new List<double>() { Exp.MaxWaveCnt[channelId] * 1000.0 / Parameters.SegmentLength };
+            List<double> fLs = new List<double>() { maxWave * 1000.0 / Parameters.SegmentLength };
             for (int i = 0; i < Parameters.ColorRate.Count; ++i)
             {
                 fLs.Add(Parameters.ColorRate[i] * fLs[0]);
@@ -182,12 +182,12 @@ namespace MouseData
             for (int i = 0; i < Parameters.ColorRate.Count; ++i)
             {
                 Ellipse e = new Ellipse();
-                e.Width = e.Height = 7 * Math.Min(1.2, Parameters.XRate * 1.4);
+                e.Width = e.Height = 7 * Math.Min(1.2, Parameters.Rate * rate * 1.4);
                 e.Fill = Parameters.ColorList[i];
                 colors.Children.Add(e);
                 TextBlock t = new TextBlock();
                 t.Text = " " + (int)Math.Round(fLs[i]) + " - " + (int)Math.Round(fLs[i + 1]) + "HZ     ";
-                t.FontSize *= Math.Min(1.2, Parameters.XRate * 1.4);
+                t.FontSize *= Math.Min(1.2, Parameters.Rate * rate * 1.4);
                 colors.Children.Add(t);
             }
             res.Children.Add(colors);
