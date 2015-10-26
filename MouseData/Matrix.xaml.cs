@@ -25,6 +25,8 @@ namespace MouseData
             InitializeComponent();
             Helper = h;
             this.Title = "Experiment " + h.Exp.Id;
+            this.Title += h.CalAvg ? " Average" : " Max";
+            this.Title += h.MaxOnly ? " (4 Food)" : " (All Data)";
             int rowCnt = (Helper.ChannelCnt / 4 + (Helper.ChannelCnt % 4 == 0 ? 0 : 1));
             int colCnt = Helper.ChannelCnt <= 4 ? Helper.ChannelCnt : 4;
             this.MainCanvas.Width = (h.CavWidth + 20) * colCnt + 20;

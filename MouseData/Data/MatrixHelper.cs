@@ -16,13 +16,14 @@ namespace MouseData
 
         public List<Shape>[] Elementes { get; set; }
         public StackPanel[] Titles { get; set; }
-        public double[] MaxAvgWave { get; set; }
+        private double[] MaxWaveData { get; set; }
         public int ChannelCnt { get; set; }
         public int CavHeight { get; set; }
         public int CavWidth { get; set; }
         private int RowCnt { get; set; }
         private int ColCnt { get; set; }
-        private bool MaxOnly { get; set; }
+        public bool MaxOnly { get; set; }
+        public bool CalAvg { get; set; }
 
         private int XStart { get; set; }
         private int XEnd { get; set; }
@@ -32,16 +33,17 @@ namespace MouseData
         /// <summary>
         /// chanel, row, col
         /// </summary>
-        private int[][][] PointCnt { get; set; }
+        private List<double>[][][] WaveData { get; set; }
 
-        private int[][][] WaveSum { get; set; }
+        private double[][][] ChooseData { get; set; }
 
         private int MLen { get; set; }
 
-        public MatrixHelper(Experiment exp, bool maxOnly = true)
+        public MatrixHelper(Experiment exp, bool avg = true, bool maxOnly = true)
         {
             this.Exp = exp;
             this.MaxOnly = maxOnly;
+            this.CalAvg = avg;
             Init();
             Calculate();
             AddElement();
@@ -76,20 +78,20 @@ namespace MouseData
                 rec.StrokeThickness = 2;
                 rec.Stroke = Brushes.Black;
                 Elementes[ch].Add(rec);
-                Titles[ch] = DrawHelper.BuildTitle(Exp.ChannelTag[ch], MaxAvgWave[ch], 0.7);
+                Titles[ch] = DrawHelper.BuildTitle(Exp.ChannelTag[ch], MaxWaveData[ch], 0.7);
             }
         }
 
         private Brush CalColor(int ch, int row, int col)
         {
             Brush brush;
-            if (PointCnt[ch][row][col] == 0)
+            if (WaveData[ch][row][col].Count == 0)
             {
                 brush = Brushes.White;
             }
             else
             {
-                double rate = (double)WaveSum[ch][row][col] / PointCnt[ch][row][col];
+                double rate = ChooseData[ch][row][col] / MaxWaveData[ch];
                 int colorId;
                 for (colorId = 0; colorId < Parameters.ColorRate.Count; ++colorId)
                 {
@@ -120,8 +122,7 @@ namespace MouseData
                     {
                         for (int ch = 0; ch < ChannelCnt; ++ch)
                         {
-                            ++PointCnt[ch][row][col];
-                            WaveSum[ch][row][col] += seg.WaveList[ch].Count * Parameters.SegmentLength / (int)seg.Length;
+                            WaveData[ch][row][col].Add(seg.WaveList[ch].Count * Parameters.SegmentLength / (int)seg.Length);
                         }
                     }
                 }
@@ -132,9 +133,17 @@ namespace MouseData
                 {
                     for (int col = 0; col < ColCnt; ++col)
                     {
-                        if (PointCnt[ch][row][col] != 0)
+                        if (WaveData[ch][row][col].Count != 0)
                         {
-                            MaxAvgWave[ch] = Math.Max(MaxAvgWave[ch], (double)WaveSum[ch][row][col] / PointCnt[ch][row][col]);
+                            if (this.CalAvg)
+                            {
+                                ChooseData[ch][row][col] = WaveData[ch][row][col].Average();
+                            }
+                            else
+                            {
+                                ChooseData[ch][row][col] = WaveData[ch][row][col].Max();
+                            }
+                            MaxWaveData[ch] = Math.Max(MaxWaveData[ch], ChooseData[ch][row][col]);
                         }
                     }
                 }
@@ -154,17 +163,21 @@ namespace MouseData
             RowCnt = (YEnd - YStart) / Parameters.MLen;
             ChannelCnt = Exp.ChannelCnt;
 
-            MaxAvgWave = new double[ChannelCnt];
-            PointCnt = new int[ChannelCnt][][];
-            WaveSum = new int[ChannelCnt][][];
+            MaxWaveData = new double[ChannelCnt];
+            WaveData = new List<double>[ChannelCnt][][];
+            ChooseData = new double[ChannelCnt][][];
             for (int i = 0; i < ChannelCnt; ++i)
             {
-                PointCnt[i] = new int[RowCnt][];
-                WaveSum[i] = new int[RowCnt][];
+                WaveData[i] = new List<double>[RowCnt][];
+                ChooseData[i] = new double[RowCnt][];
                 for (int j = 0; j < RowCnt; ++j)
                 {
-                    PointCnt[i][j] = new int[ColCnt];
-                    WaveSum[i][j] = new int[ColCnt];
+                    WaveData[i][j] = new List<double>[ColCnt];
+                    ChooseData[i][j] = new double[ColCnt];
+                    for (int k = 0; k < ColCnt; ++k)
+                    {
+                        WaveData[i][j][k] = new List<double>();
+                    }
                 }
             }
 

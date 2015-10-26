@@ -23,16 +23,16 @@ namespace MouseData
     {
         private Analyser Analyser { get; set; }
         private Dictionary<Button, Experiment> ButExp { get; set; }
+        private Dictionary<Button, CheckBox> ButCb { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
-            FillFileName();
+            FillFileName(new DirectoryInfo(System.Environment.CurrentDirectory));
         }
 
-        private void FillFileName()
+        private void FillFileName(DirectoryInfo dir)
         {
-            DirectoryInfo dir = new DirectoryInfo(System.Environment.CurrentDirectory);
             foreach (FileInfo file in dir.GetFiles())
             {
                 if (file.Name.EndsWith("Position.txt"))
@@ -94,16 +94,40 @@ namespace MouseData
             rec.Height = 10;
             this.exps.Children.Add(rec);
             ButExp = new Dictionary<Button, Experiment>();
+            ButCb = new Dictionary<Button, CheckBox>();
             foreach (Experiment exp in this.Analyser.Experiments)
             {
                 exp.Tag = this.BehaveFileTb.Text.Replace(".txt", "");
-                Button bt = new Button();
-                bt.Height = 30;
-                bt.Focusable = false;
-                bt.Click += bt_Click;
-                bt.Content = "Experiment " + exp.Id;
-                ButExp[bt] = exp;
-                this.exps.Children.Add(bt);
+                StackPanel sp = new StackPanel()
+                {
+                    Orientation = Orientation.Horizontal,
+                    Margin = new Thickness(0, 10, 0, 0),
+                    VerticalAlignment = System.Windows.VerticalAlignment.Top
+                };
+                Label lb = new Label() { Content = "Experiment " + exp.Id };
+                CheckBox cb = new CheckBox() { Content = "all", VerticalAlignment = System.Windows.VerticalAlignment.Center };
+
+                sp.Children.Add(lb);
+
+                Button[] bts = new Button[3];
+                string[] titles = new string[3] { "Trails", "MaxWave", "AverageWave" };
+                for (int i = 0; i < 3; ++i)
+                {
+                    bts[i] = new Button()
+                    {
+                        Height = 30,
+                        Focusable = false,
+                        Content = titles[i],
+                        Margin = new Thickness(5, 0, 5, 0),
+                        MinWidth = 100
+                    };
+                    bts[i].Click += bt_Click;
+                    sp.Children.Add(bts[i]);
+                    ButExp[bts[i]] = exp;
+                    ButCb[bts[i]] = cb;
+                }
+                sp.Children.Add(cb);
+                this.exps.Children.Add(sp);
             }
         }
 
@@ -122,10 +146,31 @@ namespace MouseData
         void bt_Click(object sender, RoutedEventArgs e)
         {
             Button bt = sender as Button;
-            Draw draw = new Draw(new DrawHelper(this.ButExp[bt]));
-            draw.Show();
-            Matrix mat = new Matrix(new MatrixHelper(this.ButExp[bt]));
-            mat.Show();
+            switch (bt.Content.ToString())
+            {
+                case "Trails":
+                    new Draw(new DrawHelper(this.ButExp[bt])).Show();
+                    break;
+                case "MaxWave":
+                    new Matrix(new MatrixHelper(this.ButExp[bt], false, !(bool)ButCb[bt].IsChecked)).Show();
+                    break;
+                case "AverageWave":
+                    new Matrix(new MatrixHelper(this.ButExp[bt], true, !(bool)ButCb[bt].IsChecked)).Show();
+                    break;
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+            System.Windows.Forms.FolderBrowserDialog choose = new System.Windows.Forms.FolderBrowserDialog()
+            {
+                ShowNewFolderButton = false
+            };
+            if (choose.ShowDialog() == System.Windows.Forms.DialogResult.OK && !string.IsNullOrEmpty(choose.SelectedPath))
+            {
+                FillFileName(new DirectoryInfo(choose.SelectedPath));
+            }
         }
     }
 }
