@@ -31,21 +31,21 @@ namespace MouseData
             FillFileName(new DirectoryInfo(System.Environment.CurrentDirectory));
         }
 
-        private void FillFileName(DirectoryInfo dir)
+        private void FillFileName(DirectoryInfo dir, bool fullName = false)
         {
             foreach (FileInfo file in dir.GetFiles())
             {
                 if (file.Name.EndsWith("Position.txt"))
                 {
-                    this.MoveFileTb.Text = file.Name;
+                    this.MoveFileTb.Text = fullName ? file.FullName : file.Name;
                 }
                 else if (file.Name.EndsWith("NR.txt"))
                 {
-                    this.WaveFileTb.Text = file.Name;
+                    this.WaveFileTb.Text = fullName ? file.FullName : file.Name;
                 }
                 else if (file.Name.EndsWith(".txt") && !file.Name.EndsWith("analsys.txt"))
                 {
-                    this.BehaveFileTb.Text = file.Name;
+                    this.BehaveFileTb.Text = fullName ? file.FullName : file.Name;
                 }
             }
         }
@@ -169,7 +169,7 @@ namespace MouseData
             };
             if (choose.ShowDialog() == System.Windows.Forms.DialogResult.OK && !string.IsNullOrEmpty(choose.SelectedPath))
             {
-                FillFileName(new DirectoryInfo(choose.SelectedPath));
+                FillFileName(new DirectoryInfo(choose.SelectedPath), true);
             }
         }
     }

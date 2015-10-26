@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MouseData" Height="350" Width="525" MinHeight="220" MinWidth="500" Icon="icon.ico">
     <Grid>
-        <TextBox Height="23" Margin="10,10,136.4,0" TextWrapping="Wrap" Text="Choose move file" VerticalAlignment="Top" Name="MoveFileTb"/>
-        <TextBox Height="23" Margin="10,38,136.4,0" TextWrapping="Wrap" Text="Choose behave file" VerticalAlignment="Top" Name="BehaveFileTb"/>
-        <TextBox Height="23" Margin="10,66,136.4,0" TextWrapping="Wrap" Text="Choose wave file" VerticalAlignment="Top" Name="WaveFileTb"/>
+        <TextBox Height="23" Margin="10,10,124.4,0" TextWrapping="Wrap" Text="Choose move file" VerticalAlignment="Top" Name="MoveFileTb"/>
+        <TextBox Height="23" Margin="10,38,124.4,0" TextWrapping="Wrap" Text="Choose behave file" VerticalAlignment="Top" Name="BehaveFileTb"/>
+        <TextBox Height="23" Margin="10,66,124.4,0" TextWrapping="Wrap" Text="Choose wave file" VerticalAlignment="Top" Name="WaveFileTb"/>
         <Button Content="Move" HorizontalAlignment="Right" Margin="0,10,10.4,0" VerticalAlignment="Top" Width="75" Name="MoveBt" Click="MoveBt_Click" Focusable="False"/>
         <Button Content="Behave" HorizontalAlignment="Right" Margin="0,39,10.4,0" VerticalAlignment="Top" Width="75" Name="BehaveBt" Click="BehaveBt_Click" Focusable="False"/>
         <Button Content="Wave" HorizontalAlignment="Right" Margin="0,67,10.4,0" VerticalAlignment="Top" Width="75" Name="WaveBt" Click="WaveBt_Click" Focusable="False"/>
@@ -17,7 +17,7 @@
                 </StackPanel>
             </ScrollViewer.Content>
         </ScrollViewer>
-        <Button Content="F" HorizontalAlignment="Left" Margin="387,11,0,0" VerticalAlignment="Top" Width="29" Height="78" Click="Button_Click" Focusable="False"/>
+        <Button Content="F" Margin="0,10,90.4,0" VerticalAlignment="Top" Height="78" Click="Button_Click" Focusable="False" HorizontalAlignment="Right" Width="29"/>
 
     </Grid>
 </Window>
